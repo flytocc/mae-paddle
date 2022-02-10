@@ -1,0 +1,4 @@
+numpy
+paddlepaddle_gpu>=2.2
+Pillow
+wandb
