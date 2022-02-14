@@ -111,7 +111,7 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 python main_infer.py \
 	--model vit_base_patch16 \
 	--resume ${FINETUNED_CHKPT} \
-	--img_path demo/ILSVRC2012_val_00002036.JPEG
+	--img_path demo/ILSVRC2012_val_00009508.JPEG
 ```
 
 <p align="center">
@@ -132,6 +132,7 @@ Inference results:
 
 ```
 ├── util # 功能性代码
+├── demo # 测试图片
 ├── engine_finetune.py  # Finetune核心代码
 ├── engine_pretrain.py  # 预训练核心代码
 ├── layer.py  # 网络结构
@@ -139,8 +140,10 @@ Inference results:
 ├── main_finetune.py  # Finetune脚本
 ├── main_linprobe.py  # LinearProbing脚本
 ├── main_pretrain.py  # 预训练脚本
+├── main_infer.py     # 推理脚本
 ├── models_mae.py  # mae预训练网络结构
 ├── models_vit.py  # ViT
+├── imagenet_classes.py  # ImageNet类别映射
 ├── README.md
 ├── requirements.txt
 ```
