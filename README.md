@@ -111,7 +111,7 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 python main_infer.py \
 	--model vit_base_patch16 \
 	--resume ${FINETUNED_CHKPT} \
-	--img_path demo/ILSVRC2012_val_00009508.JPEG
+	--img_path demo/ILSVRC2012_val_00002036.JPEG
 ```
 
 <p align="center">
