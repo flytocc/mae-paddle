@@ -22,6 +22,8 @@ MAE是一种可扩展的计算机视觉自监督学习方法。在预训练阶�
 
 复现精度：ViT-B，Imagenet1k val 83.454% (1400E结果，达到误差允许精度，1600E comming soon)
 
+1600E 结果正在跑，出结果后会更新到repo
+
 预训练模型在各个阶段的精度（通过1600E Pretrain的中间checkpoint进行Finetune）：
 
 | Epoch | 800    | 1000   | 1100   | 1200   | 1300   | 1400   | 1600    |
@@ -49,7 +51,7 @@ ImageNet 1K
 
 ### Pretrain
 
-```
+```bash
 python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_pretrain.py \
 	--accum_iter 2 \
 	--batch_size 256 \
@@ -64,7 +66,7 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_pretrain.py \
 
 ### Finetune
 
-```
+```bash
 python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
   --accum_iter 1 \
   --batch_size 128 \
@@ -78,11 +80,11 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 
 ### Linprobe
 
-```
+```bash
 python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_linprobe.py \
   --accum_iter 2 \
   --batch_size 1024 \
-  --model vit_base_patch16 --cls_token \
+  --model vit_base_patch16 \
   --finetune ${PRETRAIN_CHKPT} \
   --epochs 90 \
   --blr 0.1 \
@@ -94,13 +96,22 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_linprobe.py \
 
 Finetune模型下载：[百度网盘](https://pan.baidu.com/s/1SqmQNhzCrbt6HtpRl4ozwA) 75on
 
-```
+```bash
 python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
   --batch_size 128 \
   --model vit_base_patch16 \
   --resume ${FINETUNED_CHKPT} \
   --data_path ${IMAGENET_DIR} \
   --dist_eval --eval
+```
+
+### Inference
+
+```bash
+python main_infer.py \
+	--model vit_base_patch16 \
+	--resume ${FINETUNED_CHKPT} \
+	--img_path demo/ILSVRC2012_val_00009508.JPEG
 ```
 
 ## 6.代码结构
@@ -124,9 +135,9 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 
 |      模型       |           权重            |       训练日志       |
 | :------------: | :----------------------: | :-----------------: |
-| Pretrain 1600E | pretrain_vit-b_1600e.pd  |     pretrain.log    |
+| Pretrain 1600E |         running          |       running       |
 | Finetune 1600E |         running          |       running       |
-||
+||||
 | Pretrain 1400E | pretrain_vit-b_1400e.pd  |       同1600E       |
 | Finetune 1400E | finetuned_vit-b_1400e.pd | Finetuned_1400e.log |
 
@@ -135,3 +146,5 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 ## 8. License
 
 [CC-BY-NC 4.0 license](LICENSE)
+
+[Apache 2.0](LICENSE.Apache)
