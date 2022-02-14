@@ -111,7 +111,21 @@ python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" main_finetune.py \
 python main_infer.py \
 	--model vit_base_patch16 \
 	--resume ${FINETUNED_CHKPT} \
-	--img_path demo/ILSVRC2012_val_00009508.JPEG
+	--img_path demo/ILSVRC2012_val_00002036.JPEG
+```
+
+<p align="center">
+  <img src="demo/ILSVRC2012_val_00002036.JPEG" width="271">
+</p>
+
+Inference results:
+
+```
+['Persian cat']: 0.858595609664917
+['Siamese cat', 'Siamese']: 0.010528504848480225
+['Angora', 'Angora rabbit']: 0.0025586560368537903
+['lynx', 'catamount']: 0.001707116374745965
+['tub', 'vat']: 0.0010623498819768429
 ```
 
 ## 6.代码结构
