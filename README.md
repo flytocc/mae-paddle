@@ -146,5 +146,3 @@ python main_infer.py \
 ## 8. License
 
 [CC-BY-NC 4.0 license](LICENSE)
-
-[Apache 2.0](LICENSE.Apache)
