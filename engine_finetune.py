@@ -69,7 +69,7 @@ def train_one_epoch(model: nn.Layer, criterion: nn.Layer,
         loss /= accum_iter
         norm = loss_scaler(loss, optimizer, parameters=model.parameters(),
                            update_grad=(data_iter_step + 1) % accum_iter == 0)
-        scale = loss_scaler.state_dict()['scale']
+        scale = loss_scaler.state_dict().get('scale')
         if (data_iter_step + 1) % accum_iter == 0:
             clear_grad_(optimizer)
 

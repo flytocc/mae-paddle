@@ -18,7 +18,6 @@ from paddle.nn.initializer import Constant, KaimingUniform, Normal, XavierUnifor
 from layer import Block, PatchEmbed
 
 from util.pos_embed import get_2d_sincos_pos_embed
-from util.misc import paddle_gather
 
 
 xavier_uniform_ = XavierUniform()
@@ -146,13 +145,13 @@ class MaskedAutoencoderViT(nn.Layer):
 
         # keep the first subset
         ids_keep = ids_shuffle[:, :len_keep]
-        x_masked = paddle_gather(x, 1, ids_keep.unsqueeze(-1).tile([1, 1, D]))
+        x_masked = x[paddle.arange(N).unsqueeze(1), ids_keep]
 
         # generate the binary mask: 0 is keep, 1 is remove
         mask = paddle.ones([N, L])
         mask[:, :len_keep] = 0
         # unshuffle to get the binary mask
-        mask = paddle_gather(mask, 1, ids_restore)
+        mask = mask[paddle.arange(N).unsqueeze(1), ids_restore]
 
         return x_masked, mask, ids_restore
 
@@ -185,7 +184,7 @@ class MaskedAutoencoderViT(nn.Layer):
         # append mask tokens to sequence
         mask_tokens = self.mask_token.tile([x.shape[0], ids_restore.shape[1] + 1 - x.shape[1], 1])
         x_ = paddle.concat([x[:, 1:, :], mask_tokens], axis=1)  # no cls token
-        x_ = paddle_gather(x_, 1, ids_restore.unsqueeze(-1).tile([1, 1, x.shape[2]]))  # unshuffle
+        x_ = x_[paddle.arange(x_.shape[0]).unsqueeze(1), ids_restore]  # unshuffle
         x = paddle.concat([x[:, :1, :], x_], axis=1)  # append cls token
 
         # add pos embed
